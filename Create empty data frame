@@ -1,0 +1,55 @@
+ suppose i want to do the following caulation for 100 times, how to put the
+> results of x , y and z into the same dataframe/dataset?
+> x<-runif(1)
+> y<-x+1
+> z<-x+y
+
+Several possibilities:
+
+1) Use rbind
+
+Before loop:
+
+d = NULL
+
+And in the loop:
+
+d = rbind(d, data.frame(x, y, z))
+
+
+2) Build empty data frame of desired size beforehand and fill by row
+
+E.g. for 10 rows:
+d = data.frame( x=rep(0, 10), y=rep(0,10), z=rep(0,10))
+
+And in the loop (index i):
+
+d[i, ] = c(x, y, z)
+
+
+3) Build vectors first, dataframe after the loop
+
+x = NULL
+y = NULL
+z = NULL
+
+in the loop:
+
+x = append(x, runif(1))
+...
+
+After loop:
+
+d = data.frame(x, y, z)
+
+Solutions 1&3 are slower but you don't need to know the final number of
+rows in advance. Solution 2 is cleaner, in my opinion, but requires that
+you know the final size.
+
+Of course, for the particular example calculation you don't need a loop
+at all:
+
+x = runif(100)
+y = x+1
+z = x+y
+d = data.frame(x,y,z)
